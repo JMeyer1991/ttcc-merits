@@ -1,0 +1,14 @@
+This software offers a quick and easy way to calculate how many merits you
+require for your next promotion in Toontown: Corporate Clash, as well as how
+to best acquire them through your preferred method: buildings (departmental
+or Boardbot) or facilities. You are free to copy, use, and modify this
+software as you see fit.
+
+Special thanks to the editors of the official Toontown: Corporate Clash wiki
+for recording the estimated number of merits each building and facility yields.
+
+# Building the Software
+
+This software is written in "modern" (i.e., post-1990) Fortran and should be
+supported by most Fortran compilers. If you are unsure which to use, the
+GNU Fortran compiler (part of the GNU Compiler Collection) is recommended.
