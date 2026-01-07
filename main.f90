@@ -3,11 +3,14 @@ program ttcc_merits
    ! in Toontown: Corporate Clash and recommend the most efficient options
    ! for attaining them
 
+   use merits
+   
+   implicit none
+
    real          :: boost            ! 1 + num_boosts * 0.25
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: department       ! selected department
    integer       :: num_boosts       ! number of boosters currently active
-   integer       :: rec_bbuilding    ! recommended size of Boardbot bdlg
    integer       :: rec_building     ! recommended size of building
    character(50) :: rec_facility     ! recommended cog facility
    integer       :: remaining_merits ! target_merits - current_merits
@@ -101,23 +104,9 @@ program ttcc_merits
       rec_building = 6
    end if
 
-   ! calculate recommended Boardbot building size
-   if (5 * boost >= remaining_merits) then
-      rec_bbuilding = 1
-   else if (26 * boost >= remaining_merits) then
-      rec_bbuilding = 2
-   else if (100 * boost >= remaining_merits) then
-      rec_bbuilding = 3
-   else if (220 * boost >= remaining_merits) then
-      rec_bbuilding = 4
-   else if (440 * boost >= remaining_merits) then
-      rec_bbuilding = 5
-   else
-      rec_bbuilding = 6
-   end if
-
    print "(A)"       , "You may want to complete:"
    print "(A, A)"    , "* ", rec_facility
-   print "(A, I1, A)", "* ", rec_building, "-story departmental building"
-   print "(A, I1, A)", "* ", rec_bbuilding, "-story Boardbot building"
+   print "(A, I1, A, /)", "* ", rec_building, "-story departmental building"
+
+   call bb_bldg(remaining_merits, boost)
 end program ttcc_merits
