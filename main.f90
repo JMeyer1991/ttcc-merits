@@ -11,7 +11,6 @@ program ttcc_merits
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: department       ! selected department
    integer       :: num_boosts       ! number of boosters currently active
-   integer       :: rec_building     ! recommended size of building
    character(50) :: rec_facility     ! recommended cog facility
    integer       :: remaining_merits ! target_merits - current_merits
    integer       :: target_merits    ! total merits needed for promotion
@@ -89,24 +88,11 @@ program ttcc_merits
       print "(A)", "Invalid Department"
    end if
 
-   ! calculate recommended building size
-   if (15 * boost >= remaining_merits) then
-      rec_building = 1
-   else if (65 * boost >= remaining_merits) then
-      rec_building = 2
-   else if (250 * boost >= remaining_merits) then
-      rec_building = 3
-   else if (550 * boost >= remaining_merits) then
-      rec_building = 4
-   else if (1100 * boost >= remaining_merits) then
-      rec_building = 5
-   else
-      rec_building = 6
-   end if
-
    print "(A)"       , "You may want to complete:"
    print "(A, A)"    , "* ", rec_facility
-   print "(A, I1, A, /)", "* ", rec_building, "-story departmental building"
 
+   print *
+   call dpt_bldg(remaining_merits, boost)
+   print *
    call bb_bldg(remaining_merits, boost)
 end program ttcc_merits

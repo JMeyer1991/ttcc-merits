@@ -8,7 +8,7 @@ module merits
    private
 
    public bb_bldg
-   !public dpt_bldg
+   public dpt_bldg
    !public facil
 
 contains
@@ -36,5 +36,30 @@ contains
          end do
       end do
    end subroutine bb_bldg
+
+   subroutine dpt_bldg(needed, boost)
+      real, intent(in) :: boost
+      integer :: i
+      integer, intent(in) :: needed
+      integer :: remain
+      integer, dimension(6), parameter :: yield = &
+         [15, 65, 250, 550, 1100, 3100]
+
+      remain = needed
+
+      print "(A)", "Departmental Buildings"
+      print "(A)", "----------------------"
+
+      do while (remain > 0)
+         do i = 1, size(yield)
+            if(yield(i) * boost >= remain .or. i == size(yield)) then
+               print "(A, I1, A)", "* ", i, "-story"
+               remain = remain - yield(i) * boost
+               exit
+            end if
+         end do
+      end do
+   end subroutine dpt_bldg
+
 
 end module merits
