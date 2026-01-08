@@ -13,52 +13,52 @@ module merits
 
 contains
 
+   subroutine calc_merits(needed, yield, options)
+      integer :: i
+      integer, intent(in) :: needed
+      character(50), intent(in) :: options(:)
+      integer :: remain
+      real, intent(in) :: yield(:)
+
+      remain = needed
+
+      do while (remain > 0)
+         do i = 1, size(yield)
+            if(yield(i) >= remain .or. i == size(yield)) then
+               print "(A, A)", "* ", options(i)
+               remain = remain - yield(i)
+               exit
+            end if
+         end do
+      end do
+   end subroutine calc_merits
+
    ! calculates promotion pathway using Boardbot buildings
    subroutine bb_bldg(needed, boost)
       real, intent(in) :: boost
-      integer :: i
       integer, intent(in) :: needed
-      integer :: remain
+      character(50), dimension(6), parameter :: options = &
+         ["1-story", "2-story", "3-story", "4-story", "5-story", "6-story"]
       integer, dimension(6), parameter :: yield = [5, 26, 100, 220, 440, 1400]
-
-      remain = needed
 
       print "(A)", "Boardbot Buildings"
       print "(A)", "------------------"
 
-      do while (remain > 0)
-         do i = 1, size(yield)
-            if(yield(i) * boost >= remain .or. i == size(yield)) then
-               print "(A, I1, A)", "* ", i, "-story"
-               remain = remain - yield(i) * boost
-               exit
-            end if
-         end do
-      end do
+      call calc_merits(needed, yield * boost, options)
    end subroutine bb_bldg
 
    subroutine dpt_bldg(needed, boost)
       real, intent(in) :: boost
-      integer :: i
       integer, intent(in) :: needed
-      integer :: remain
+      character(50), dimension(6), parameter :: options = &
+         ["1-story", "2-story", "3-story", "4-story", "5-story", "6-story"]
       integer, dimension(6), parameter :: yield = &
          [15, 65, 250, 550, 1100, 3100]
-
-      remain = needed
 
       print "(A)", "Departmental Buildings"
       print "(A)", "----------------------"
 
-      do while (remain > 0)
-         do i = 1, size(yield)
-            if(yield(i) * boost >= remain .or. i == size(yield)) then
-               print "(A, I1, A)", "* ", i, "-story"
-               remain = remain - yield(i) * boost
-               exit
-            end if
-         end do
-      end do
+      call calc_merits(needed, yield * boost, options)
    end subroutine dpt_bldg
 
 
