@@ -9,7 +9,7 @@ module merits
 
    public bb_bldg
    public dpt_bldg
-   !public facil
+   public facil
 
 contains
 
@@ -61,5 +61,74 @@ contains
       call calc_merits(needed, yield * boost, options)
    end subroutine dpt_bldg
 
+   subroutine facil(needed, boost, dpt)
+      real, intent(in) :: boost
+      character(1), intent(in) :: dpt
+      integer, intent(in) :: needed
+      character(50), allocatable :: options(:)
+      integer, allocatable :: yield(:)
+
+      if (dpt == "b" .or. dpt == "B") then
+         allocate(options(9))
+         options = &
+            ["Minimal Silver Sprocket                           ", &
+             "Silver Sprocket with Entrance Battles             ", &
+             "Full Silver Sprocket                              ", &
+             "Minimal Golden Gear                               ", &
+             "Golden Gear with Entrance Battles                 ", &
+             "Full Golden Gear                                  ", &
+             "Minimal Diamond Dynamo                            ", &
+             "Diamond Dynamo with Entrance Battles              ", &
+             "Full Diamond Dynamo                               "]
+         allocate(yield(9))
+         yield = [2800, 3300, 5000, 6500, 7700, 8500, 11000, 15500, 20000]
+         
+         print "(A)", "Bossbot Facilities"
+         print "(A)", "------------------"
+
+         call calc_merits(needed, yield * boost, options)
+      else if (dpt == "c" .or. dpt == "C") then
+         allocate(options(3))
+         options = &
+            ["Coin Mint                                         ", &
+             "Dollar Mint                                       ", &
+             "Bullion Mint                                      "]
+         allocate(yield(3))
+         yield = [1250, 2200, 3100]
+
+         print "(A)", "Cashbot Facilities"
+         print "(A)", "------------------"
+
+         call calc_merits(needed, yield * boost, options)
+      else if (dpt == "l" .or. dpt == "L") then
+         allocate(options(3))
+         options = &
+            ["Lawfice A113                                      ", &
+             "Lawfice B221                                      ", &
+             "Lawfice C418                                      "]
+         allocate(yield(3))
+         yield = [3000, 5000, 7250]
+
+         print "(A)", "Lawbot Facilities"
+         print "(A)", "-----------------"
+
+         call calc_merits(needed, yield * boost, options)
+      else if (dpt == "s" .or. dpt == "S") then
+         allocate(options(4))
+         options = &
+            ["Short Front Factory                               ", &
+             "Short Side Factory                                ", &
+             "Long Front Factory                                ", &
+             "Long Side Factory                                 "]
+         yield = [1300, 1500, 2500, 3000]
+
+         print "(A)", "Sellbot Facilities"
+         print "(A)", "------------------"
+
+         call calc_merits(needed, yield * boost, options)
+      else
+         print *, "ERROR: Invalid department selected."
+      end if
+   end subroutine facil
 
 end module merits
