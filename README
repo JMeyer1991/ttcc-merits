@@ -13,3 +13,7 @@ for recording the estimated number of merits each building and facility yields.
 This software is written in "modern" (i.e., post-1990) Fortran and should be
 supported by most Fortran compilers. If you are unsure which to use, the
 GNU Fortran compiler (part of the GNU Compiler Collection) is recommended.
+
+To build ttcc-merits using the GNU Fortran compiler, use the following command:
+
+gfortran merits.f90 main.f90 -o ttcc-merits
