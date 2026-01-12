@@ -16,4 +16,4 @@ GNU Fortran compiler (part of the GNU Compiler Collection) is recommended.
 
 To build ttcc-merits using the GNU Fortran compiler, use the following command:
 
-gfortran merits.f90 main.f90 -o ttcc-merits
+gfortran merits.f90 main.f90 -o ttcc_merits
