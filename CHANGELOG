@@ -1,3 +1,8 @@
+Version 2.1.0 (January 12, 2026)
+* Number of repetitions are now indicated for shorter, cleaner lists.
+* Department-specific merit names are used throughout the prompts and output.
+* Estimated merit yield is now listed alongside facilities and buildings.
+
 Version 2.0.0 (January 7, 2026)
 * Promotion "pathways" are now displayed, listing the full slate of buildings
   or facilities needed to attain the next promotion.
