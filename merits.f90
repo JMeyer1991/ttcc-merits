@@ -13,13 +13,28 @@ module merits
 
 contains
 
-   subroutine calc_merits(needed, yield, options)
+   subroutine calc_merits(needed, yield, options, dpt)
+      character(1), intent(in) :: dpt
       integer :: i
+      character(50) :: mname
       integer, intent(in) :: needed
       character(50), intent(in) :: options(:)
       integer :: remain
       integer :: reps
       real, intent(in) :: yield(:)
+
+      select case (dpt)
+         case ("S", "s")
+            mname = "Invoices"
+         case ("C", "c")
+            mname = "Cogbucks"
+         case ("L", "l")
+            mname = "Patents"
+         case ("B", "b")
+            mname = "Stock Options"
+         case default
+            mname = "merits"
+      end select
 
       remain = needed
 
@@ -27,8 +42,9 @@ contains
          do i = 1, size(yield)
             if(yield(i) >= remain .or. i == size(yield)) then
                reps = remain / yield(i) + 1
-               print "(A, A, A, I2, A, I5, A)", "* ", trim(options(i)), &
-                  " (x", reps, ") (~", int(yield(i) * reps), " merits)"
+               print "(A, A, A, I2, A, I5, A, A, A)", "* ", trim(options(i)), &
+                  " (x", reps, ") (~", int(yield(i)), " ", trim(mname), &
+                  " each)"
                remain = remain - yield(i) * reps
                exit
             end if
@@ -37,8 +53,9 @@ contains
    end subroutine calc_merits
 
    ! calculates promotion pathway using Boardbot buildings
-   subroutine bb_bldg(needed, boost)
+   subroutine bb_bldg(needed, boost, dpt)
       real, intent(in) :: boost
+      character(1), intent(in) :: dpt
       integer, intent(in) :: needed
       character(50), dimension(6), parameter :: options = &
          ["1-story", "2-story", "3-story", "4-story", "5-story", "6-story"]
@@ -47,11 +64,12 @@ contains
       print "(A)", "Boardbot Buildings"
       print "(A)", "------------------"
 
-      call calc_merits(needed, yield * boost, options)
+      call calc_merits(needed, yield * boost, options, dpt)
    end subroutine bb_bldg
 
-   subroutine dpt_bldg(needed, boost)
+   subroutine dpt_bldg(needed, boost, dpt)
       real, intent(in) :: boost
+      character(1), intent(in) :: dpt
       integer, intent(in) :: needed
       character(50), dimension(6), parameter :: options = &
          ["1-story", "2-story", "3-story", "4-story", "5-story", "6-story"]
@@ -61,7 +79,7 @@ contains
       print "(A)", "Departmental Buildings"
       print "(A)", "----------------------"
 
-      call calc_merits(needed, yield * boost, options)
+      call calc_merits(needed, yield * boost, options, dpt)
    end subroutine dpt_bldg
 
    subroutine facil(needed, boost, dpt)
@@ -89,7 +107,7 @@ contains
          print "(A)", "Bossbot Facilities"
          print "(A)", "------------------"
 
-         call calc_merits(needed, yield * boost, options)
+         call calc_merits(needed, yield * boost, options, dpt)
       else if (dpt == "c" .or. dpt == "C") then
          allocate(options(3))
          options = &
@@ -102,7 +120,7 @@ contains
          print "(A)", "Cashbot Facilities"
          print "(A)", "------------------"
 
-         call calc_merits(needed, yield * boost, options)
+         call calc_merits(needed, yield * boost, options, dpt)
       else if (dpt == "l" .or. dpt == "L") then
          allocate(options(3))
          options = &
@@ -115,7 +133,7 @@ contains
          print "(A)", "Lawbot Facilities"
          print "(A)", "-----------------"
 
-         call calc_merits(needed, yield * boost, options)
+         call calc_merits(needed, yield * boost, options, dpt)
       else if (dpt == "s" .or. dpt == "S") then
          allocate(options(4))
          options = &
@@ -128,7 +146,7 @@ contains
          print "(A)", "Sellbot Facilities"
          print "(A)", "------------------"
 
-         call calc_merits(needed, yield * boost, options)
+         call calc_merits(needed, yield * boost, options, dpt)
       else
          print *, "ERROR: Invalid department selected."
       end if

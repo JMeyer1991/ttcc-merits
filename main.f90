@@ -39,7 +39,7 @@ program ttcc_merits
    print *
    call facil(remaining_merits, boost, department)
    print *
-   call dpt_bldg(remaining_merits, boost)
+   call dpt_bldg(remaining_merits, boost, department)
    print *
-   call bb_bldg(remaining_merits, boost)
+   call bb_bldg(remaining_merits, boost, department)
 end program ttcc_merits
