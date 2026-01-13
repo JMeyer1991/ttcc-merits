@@ -10,6 +10,7 @@ module merits
    public bb_bldg
    public dpt_bldg
    public facil
+   public get_mname
 
 contains
 
@@ -23,18 +24,7 @@ contains
       integer :: reps
       real, intent(in) :: yield(:)
 
-      select case (dpt)
-         case ("S", "s")
-            mname = "Invoices"
-         case ("C", "c")
-            mname = "Cogbucks"
-         case ("L", "l")
-            mname = "Patents"
-         case ("B", "b")
-            mname = "Stock Options"
-         case default
-            mname = "merits"
-      end select
+      call get_mname(dpt, mname)
 
       remain = needed
 
@@ -51,6 +41,24 @@ contains
          end do
       end do
    end subroutine calc_merits
+
+   subroutine get_mname(dpt, mname)
+      character(1), intent(in) :: dpt
+      character(50), intent(out) :: mname
+
+      select case (dpt)
+         case ("S", "s")
+            mname = "Invoices"
+         case ("C", "c")
+            mname = "Cogbucks"
+         case ("L", "l")
+            mname = "Patents"
+         case ("B", "b")
+            mname = "Stock Options"
+         case default
+            mname = "merits"
+         end select
+   end subroutine get_mname
 
    ! calculates promotion pathway using Boardbot buildings
    subroutine bb_bldg(needed, boost, dpt)
