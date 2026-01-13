@@ -18,6 +18,7 @@ contains
       integer, intent(in) :: needed
       character(50), intent(in) :: options(:)
       integer :: remain
+      integer :: reps
       real, intent(in) :: yield(:)
 
       remain = needed
@@ -25,8 +26,10 @@ contains
       do while (remain > 0)
          do i = 1, size(yield)
             if(yield(i) >= remain .or. i == size(yield)) then
-               print "(A, A)", "* ", options(i)
-               remain = remain - yield(i)
+               reps = remain / yield(i) + 1
+               print "(A, A, A, I2, A)", "* ", trim(options(i)), " (x", reps, &
+                  ")"
+               remain = remain - yield(i) * reps
                exit
             end if
          end do
