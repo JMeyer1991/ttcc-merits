@@ -10,6 +10,7 @@ program ttcc_merits
    real          :: boost            ! 1 + num_boosts * 0.25
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: department       ! selected department
+   character(50) :: mname            ! department merit name
    integer       :: num_boosts       ! number of boosters currently active
    integer       :: remaining_merits ! target_merits - current_merits
    integer       :: target_merits    ! total merits needed for promotion
@@ -19,12 +20,15 @@ program ttcc_merits
    print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot"
    read      *, department
 
+   call get_mname(department, mname)
+
    ! ask the user how many merits they currently have
-   print "(A)", "How many merits do you currently have?"
+   print "(A, A, A)", "How many ", trim(mname), " do you currently have?"
    read      *, current_merits
 
    ! ask the user how many total merits their promotion requires
-   print "(A)", "How many total merits does your next promotion require?"
+   print "(A, A, A)", "How many total ", trim(mname), &
+      " does your next promotion require?"
    read      *, target_merits
 
    ! ask the user how many active boosters they have; caclculate boost
@@ -34,7 +38,8 @@ program ttcc_merits
 
    ! calculate remaining merits and display the result
    remaining_merits = target_merits - current_merits
-   print "(A, I5, A)", "You still need ", remaining_merits, " merits."
+   print "(A, I5, A, A, A)", "You still need ", remaining_merits, " ", &
+      trim(mname), "."
 
    print *
    call facil(remaining_merits, boost, department)
