@@ -27,8 +27,8 @@ contains
          do i = 1, size(yield)
             if(yield(i) >= remain .or. i == size(yield)) then
                reps = remain / yield(i) + 1
-               print "(A, A, A, I2, A)", "* ", trim(options(i)), " (x", reps, &
-                  ")"
+               print "(A, A, A, I2, A, I5, A)", "* ", trim(options(i)), &
+                  " (x", reps, ") (~", int(yield(i) * reps), " merits)"
                remain = remain - yield(i) * reps
                exit
             end if
