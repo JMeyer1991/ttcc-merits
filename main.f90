@@ -1,15 +1,11 @@
 program ttcc_merits
-   ! calculate the number of merits needed for a cog disguise promotion
-   ! in Toontown: Corporate Clash and recommend the most efficient options
-   ! for attaining them
-
    use merits
    
    implicit none
 
    real          :: boost            ! 1 + num_boosts * 0.25
    integer       :: current_merits   ! curent merits in chosen department
-   character(1)  :: department       ! selected department
+   character(1)  :: dpt              ! selected department
    character(50) :: mname            ! department merit name
    integer       :: num_boosts       ! number of boosters currently active
    integer       :: remaining_merits ! target_merits - current_merits
@@ -18,9 +14,9 @@ program ttcc_merits
    ! ask the user which department they are trying to attain merits in
    print "(A)", "Select a department."
    print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot"
-   read      *, department
+   read      *, dpt
 
-   call get_mname(department, mname)
+   call get_mname(dpt, mname)
 
    ! ask the user how many merits they currently have
    print "(A, A, A)", "How many ", trim(mname), " do you currently have?"
@@ -42,9 +38,9 @@ program ttcc_merits
       trim(mname), "."
 
    print *
-   call facil(remaining_merits, boost, department)
+   call facil(remaining_merits, boost, dpt)
    print *
-   call dpt_bldg(remaining_merits, boost, department)
+   call dpt_bldg(remaining_merits, boost, dpt)
    print *
-   call bb_bldg(remaining_merits, boost, department)
+   call bb_bldg(remaining_merits, boost, dpt)
 end program ttcc_merits
