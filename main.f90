@@ -3,44 +3,73 @@ program ttcc_merits
    
    implicit none
 
+   character(50) :: arg              ! placeholder for parsing arguments
    real          :: boost            ! 1 + num_boosts * 0.25
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: dpt              ! selected department
+   integer       :: i                ! generic index variable
    character(50) :: mname            ! department merit name
    integer       :: num_boosts       ! number of boosters currently active
+   logical       :: persist          ! indicates whether the -p flag is active
    integer       :: remaining_merits ! target_merits - current_merits
    integer       :: target_merits    ! total merits needed for promotion
 
-   ! ask the user which department they are trying to attain merits in
-   print "(A)", "Select a department."
-   print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot"
-   read      *, dpt
+   persist = .false. ! persistent mode is off by default
 
-   call get_mname(dpt, mname)
+   do i = 1, command_argument_count()
+      call get_command_argument(i, arg)
 
-   ! ask the user how many merits they currently have
-   print "(A, A, A)", "How many ", trim(mname), " do you currently have?"
-   read      *, current_merits
+      select case (trim(arg))
+         case ('-p', '-persist')
+            persist = .true. ! turn on persistent mode
+         case default
+            print "(A, A)", "Unknown Argument: ", trim(arg)
+      end select
+   end do
+   
+   do
+      print "(A)", "Select a department."
+      
+      if (persist) then
+         print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot  E(x)it"
+      else
+         print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot"
+      end if
+      
+      read *, dpt
 
-   ! ask the user how many total merits their promotion requires
-   print "(A, A, A)", "How many total ", trim(mname), &
-      " does your next promotion require?"
-   read      *, target_merits
+      if (dpt == "x" .or. dpt == "X") then
+         exit
+      else
+         call get_mname(dpt, mname)
+      end if
 
-   ! ask the user how many active boosters they have; caclculate boost
-   print "(A)", "How many boosters do you currently have?"
-   read      *, num_boosts
-   boost = 1 + num_boosts * 0.25
+      print "(A, A, A)", "How many ", trim(mname), " do you currently have?"
+      read      *, current_merits
 
-   ! calculate remaining merits and display the result
-   remaining_merits = target_merits - current_merits
-   print "(A, I5, A, A, A)", "You still need ", remaining_merits, " ", &
-      trim(mname), "."
+      print "(A, A, A)", "How many total ", trim(mname), &
+         " does your next promotion require?"
+      read      *, target_merits
 
-   print *
-   call facil(remaining_merits, boost, dpt)
-   print *
-   call dpt_bldg(remaining_merits, boost, dpt)
-   print *
-   call bb_bldg(remaining_merits, boost, dpt)
+      print "(A)", "How many boosters do you currently have?"
+      read      *, num_boosts
+      boost = 1 + num_boosts * 0.25
+
+      remaining_merits = target_merits - current_merits
+      print "(A, I5, A, A, A)", "You still need ", remaining_merits, " ", &
+         trim(mname), "."
+
+      print *
+      call facil(remaining_merits, boost, dpt)
+      print *
+      call dpt_bldg(remaining_merits, boost, dpt)
+      print *
+      call bb_bldg(remaining_merits, boost, dpt)
+
+      if (.not. persist) then
+         exit
+      else
+         print *
+      end if
+   end do
 end program ttcc_merits
