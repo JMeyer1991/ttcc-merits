@@ -5,7 +5,7 @@ program ttcc_merits
 
    character(50) :: arg              ! placeholder for parsing arguments
    real          :: boost            ! 1 + num_boosts * 0.25
-   character(5)  :: current_char     ! current merits expressed as character
+   character(5)  :: charint          ! character to be converted to integer
    logical       :: current_flag     ! current merits specified from cli
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: dpt              ! selected department
@@ -16,7 +16,6 @@ program ttcc_merits
    integer       :: num_boosts       ! number of boosters currently active
    logical       :: persist          ! indicates whether the -p flag is active
    integer       :: remaining_merits ! target_merits - current_merits
-   character(5)  :: target_char      ! target_merits as character
    logical       :: target_flag      ! target merits specified from cli
    integer       :: target_merits    ! total merits needed for promotion
 
@@ -33,16 +32,16 @@ program ttcc_merits
             dpt_flag = .true. ! indicate that department has been specified
             call get_command_argument(i + 1, dpt)
          case ('-h', '-have')
-            call get_command_argument(i + 1, current_char)
-            read (current_char, '(I5)', iostat=io_status) current_merits
+            call get_command_argument(i + 1, charint)
+            read (charint, '(I5)', iostat=io_status) current_merits
             if (io_status == 0) then
                current_flag = .true.
             end if
          case ('-p', '-persist')
             persist = .true. ! turn on persistent mode
          case ('-r', '-req')
-            call get_command_argument(i + 1, target_char)
-            read (target_char, '(I5)', iostat=io_status) target_merits
+            call get_command_argument(i + 1, charint)
+            read (charint, '(I5)', iostat=io_status) target_merits
             if(io_status == 0) then
                target_flag = .true.
             end if
