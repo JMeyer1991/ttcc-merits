@@ -5,10 +5,13 @@ program ttcc_merits
 
    character(50) :: arg              ! placeholder for parsing arguments
    real          :: boost            ! 1 + num_boosts * 0.25
+   character(5)  :: current_char     ! current merits expressed as character
+   logical       :: current_flag     ! current merits specified from cli
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: dpt              ! selected department
    logical       :: dpt_flag         ! department specified from command line
    integer       :: i                ! generic index variable
+   integer       :: io_status        ! internal I/O status
    character(50) :: mname            ! department merit name
    integer       :: num_boosts       ! number of boosters currently active
    logical       :: persist          ! indicates whether the -p flag is active
@@ -17,6 +20,7 @@ program ttcc_merits
 
    persist = .false.
    dpt_flag = .false.
+   current_flag = .false.
 
    do i = 1, command_argument_count()
       call get_command_argument(i, arg)
@@ -27,10 +31,16 @@ program ttcc_merits
          case ('-d', '-dpt')
             dpt_flag = .true. ! indicate that department has been specified
             call get_command_argument(i + 1, dpt)
+         case ('-h', '-have')
+            call get_command_argument(i + 1, current_char)
+            read (current_char, '(I5)', iostat=io_status) current_merits
+            if (io_status == 0) then
+               current_flag = .true.
+            end if
       end select
    end do
    
-   do      
+   do
       if (dpt_flag) then
          continue
       else if (persist) then
@@ -49,8 +59,11 @@ program ttcc_merits
          call get_mname(dpt, mname)
       end if
 
-      print "(A, A, A)", "How many ", trim(mname), " do you currently have?"
-      read      *, current_merits
+      if (.not. current_flag) then
+         print "(A, A, A)", "How many ", trim(mname), &
+            " do you currently have?"
+         read      *, current_merits
+      end if
 
       print "(A, A, A)", "How many total ", trim(mname), &
          " does your next promotion require?"
@@ -76,6 +89,7 @@ program ttcc_merits
       else
          print *
          dpt_flag = .false.
+         current_flag = .false.
       end if
    end do
 end program ttcc_merits
