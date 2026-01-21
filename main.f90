@@ -7,6 +7,7 @@ program ttcc_merits
    real          :: boost            ! 1 + num_boosts * 0.25
    integer       :: current_merits   ! curent merits in chosen department
    character(1)  :: dpt              ! selected department
+   logical       :: dpt_flag         ! department specified from command line
    integer       :: i                ! generic index variable
    character(50) :: mname            ! department merit name
    integer       :: num_boosts       ! number of boosters currently active
@@ -14,7 +15,8 @@ program ttcc_merits
    integer       :: remaining_merits ! target_merits - current_merits
    integer       :: target_merits    ! total merits needed for promotion
 
-   persist = .false. ! persistent mode is off by default
+   persist = .false.
+   dpt_flag = .false.
 
    do i = 1, command_argument_count()
       call get_command_argument(i, arg)
@@ -22,21 +24,24 @@ program ttcc_merits
       select case (trim(arg))
          case ('-p', '-persist')
             persist = .true. ! turn on persistent mode
-         case default
-            print "(A, A)", "Unknown Argument: ", trim(arg)
+         case ('-d', '-dpt')
+            dpt_flag = .true. ! indicate that department has been specified
+            call get_command_argument(i + 1, dpt)
       end select
    end do
    
-   do
-      print "(A)", "Select a department."
-      
-      if (persist) then
+   do      
+      if (dpt_flag) then
+         continue
+      else if (persist) then
+         print "(A)", "Select a department."
          print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot  E(x)it"
+         read *, dpt
       else
+         print "(A)", "Select a department."
          print "(A)", "(S)ellbot  (C)ashbot  (L)awbot  (B)ossbot"
+         read *, dpt
       end if
-      
-      read *, dpt
 
       if (dpt == "x" .or. dpt == "X") then
          exit
@@ -70,6 +75,7 @@ program ttcc_merits
          exit
       else
          print *
+         dpt_flag = .false.
       end if
    end do
 end program ttcc_merits
