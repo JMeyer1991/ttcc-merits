@@ -16,11 +16,14 @@ program ttcc_merits
    integer       :: num_boosts       ! number of boosters currently active
    logical       :: persist          ! indicates whether the -p flag is active
    integer       :: remaining_merits ! target_merits - current_merits
+   character(5)  :: target_char      ! target_merits as character
+   logical       :: target_flag      ! target merits specified from cli
    integer       :: target_merits    ! total merits needed for promotion
 
    persist = .false.
    dpt_flag = .false.
    current_flag = .false.
+   target_flag = .false.
 
    do i = 1, command_argument_count()
       call get_command_argument(i, arg)
@@ -37,6 +40,12 @@ program ttcc_merits
             end if
          case ('-p', '-persist')
             persist = .true. ! turn on persistent mode
+         case ('-r', '-req')
+            call get_command_argument(i + 1, target_char)
+            read (target_char, '(I5)', iostat=io_status) target_merits
+            if(io_status == 0) then
+               target_flag = .true.
+            end if
          case ('--help')
             print "(A, A)", "-d <dpt> or -dpt <dpt>   ", &
                "department to obtain merits in"
@@ -73,9 +82,11 @@ program ttcc_merits
          read      *, current_merits
       end if
 
-      print "(A, A, A)", "How many total ", trim(mname), &
-         " does your next promotion require?"
-      read      *, target_merits
+      if (.not. target_flag) then
+         print "(A, A, A)", "How many total ", trim(mname), &
+            " does your next promotion require?"
+         read      *, target_merits
+      end if
 
       print "(A)", "How many boosters do you currently have?"
       read      *, num_boosts
@@ -98,6 +109,7 @@ program ttcc_merits
          print *
          dpt_flag = .false.
          current_flag = .false.
+         target_flag = .false.
       end if
    end do
 end program ttcc_merits
