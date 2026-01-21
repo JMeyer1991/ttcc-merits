@@ -5,6 +5,7 @@ program ttcc_merits
 
    character(50) :: arg              ! placeholder for parsing arguments
    real          :: boost            ! 1 + num_boosts * 0.25
+   logical       :: boost_flag       ! indicates boost specified in cli
    character(5)  :: charint          ! character to be converted to integer
    logical       :: current_flag     ! current merits specified from cli
    integer       :: current_merits   ! curent merits in chosen department
@@ -23,11 +24,19 @@ program ttcc_merits
    dpt_flag = .false.
    current_flag = .false.
    target_flag = .false.
+   boost_flag = .false.
 
    do i = 1, command_argument_count()
       call get_command_argument(i, arg)
 
       select case (trim(arg))
+         case ('-b', '-boost')
+            call get_command_argument(i + 1, charint)
+            read (charint, '(I1)', iostat=io_status) num_boosts
+            if(io_status == 0) then
+               boost = 1 + num_boosts * 0.25
+               boost_flag = .true.
+            end if
          case ('-d', '-dpt')
             dpt_flag = .true. ! indicate that department has been specified
             call get_command_argument(i + 1, dpt)
@@ -46,15 +55,17 @@ program ttcc_merits
                target_flag = .true.
             end if
          case ('--help')
-            print "(A, A)", "-d <dpt> or -dpt <dpt>    ", &
+            print "(A, A)", "-b <num> or -boost <num>   ", &
+               "number of boosters currently active"
+            print "(A, A)", "-d <dpt> or -dpt <dpt>     ", &
                "department to obtain merits in"
-            print "(A, A)", "-h <num> or -have <num>   ", &
+            print "(A, A)", "-h <num> or -have <num>    ", &
                "current number of merits"
-            print "(A, A)", "-p or -persist            ", &
+            print "(A, A)", "-p or -persist             ", &
                "use the interactive interface continuously"
-            print "(A, A)", "-r <num> or -req <num>    ", &
+            print "(A, A)", "-r <num> or -req <num>     ", &
                "target number of merits for promotion"
-            print "(A, A)", "--help                    ", &
+            print "(A, A)", "--help                     ", &
                "display this help information and exit"
             stop
       end select
@@ -91,9 +102,11 @@ program ttcc_merits
          read      *, target_merits
       end if
 
-      print "(A)", "How many boosters do you currently have?"
-      read      *, num_boosts
-      boost = 1 + num_boosts * 0.25
+      if (.not. boost_flag) then
+         print "(A)", "How many boosters do you currently have?"
+         read      *, num_boosts
+         boost = 1 + num_boosts * 0.25
+      end if
 
       remaining_merits = target_merits - current_merits
       print "(A, I5, A, A, A)", "You still need ", remaining_merits, " ", &
@@ -113,6 +126,7 @@ program ttcc_merits
          dpt_flag = .false.
          current_flag = .false.
          target_flag = .false.
+         boost_flag = .false.
       end if
    end do
 end program ttcc_merits
