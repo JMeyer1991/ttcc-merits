@@ -47,11 +47,15 @@ program ttcc_merits
                target_flag = .true.
             end if
          case ('--help')
-            print "(A, A)", "-d <dpt> or -dpt <dpt>   ", &
+            print "(A, A)", "-d <dpt> or -dpt <dpt>    ", &
                "department to obtain merits in"
             print "(A, A)", "-h <num> or -have <num>   ", &
                "current number of merits"
-            print "(A, A)", "--help  ", &
+            print "(A, A)", "-p or -persist            ", &
+               "use the interactive interface continuously"
+            print "(A, A)", "-r <num> or -req <num>    ", &
+               "target number of merits for promotion"
+            print "(A, A)", "--help                    ", &
                "display this help information and exit"
             stop
       end select
