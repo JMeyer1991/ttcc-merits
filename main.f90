@@ -26,8 +26,6 @@ program ttcc_merits
       call get_command_argument(i, arg)
 
       select case (trim(arg))
-         case ('-p', '-persist')
-            persist = .true. ! turn on persistent mode
          case ('-d', '-dpt')
             dpt_flag = .true. ! indicate that department has been specified
             call get_command_argument(i + 1, dpt)
@@ -37,6 +35,16 @@ program ttcc_merits
             if (io_status == 0) then
                current_flag = .true.
             end if
+         case ('-p', '-persist')
+            persist = .true. ! turn on persistent mode
+         case ('--help')
+            print "(A, A)", "-d <dpt> or -dpt <dpt>   ", &
+               "department to obtain merits in"
+            print "(A, A)", "-h <num> or -have <num>   ", &
+               "current number of merits"
+            print "(A, A)", "--help  ", &
+               "display this help information and exit"
+            stop
       end select
    end do
    
