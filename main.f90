@@ -3,22 +3,13 @@ program ttcc_merits
    
    implicit none
 
-   character(50) :: arg              ! placeholder for parsing arguments
-   real          :: boost            ! 1 + num_boosts * 0.25
-   logical       :: boost_flag       ! indicates boost specified in cli
-   character(5)  :: charint          ! character to be converted to integer
-   logical       :: current_flag     ! current merits specified from cli
-   integer       :: current_merits   ! curent merits in chosen department
-   character(1)  :: dpt              ! selected department
-   logical       :: dpt_flag         ! department specified from command line
-   integer       :: i                ! generic index variable
-   integer       :: io_status        ! internal I/O status
-   character(50) :: mname            ! department merit name
-   integer       :: num_boosts       ! number of boosters currently active
-   logical       :: persist          ! indicates whether the -p flag is active
-   integer       :: remaining_merits ! target_merits - current_merits
-   logical       :: target_flag      ! target merits specified from cli
-   integer       :: target_merits    ! total merits needed for promotion
+   character(1) :: dpt
+   character(5) :: charint
+   character(50) :: arg, mname
+   integer :: current_merits, i, io_status, num_boosts, remaining_merits, &
+      target_merits
+   logical :: boost_flag, current_flag, dpt_flag, persist, target_flag
+   real :: boost
 
    persist = .false.
    dpt_flag = .false.
