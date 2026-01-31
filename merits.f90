@@ -7,21 +7,16 @@ module merits
 
    private
 
-   public bb_bldg
-   public dpt_bldg
-   public facil
-   public get_mname
+   public bb_bldg, dpt_bldg, facil, get_mname
 
 contains
 
    subroutine calc_merits(needed, yield, options, dpt)
       character(1), intent(in) :: dpt
-      integer :: i
       character(50) :: mname
-      integer, intent(in) :: needed
       character(50), intent(in) :: options(:)
-      integer :: remain
-      integer :: reps
+      integer :: i, remain, reps
+      integer, intent(in) :: needed
       real, intent(in) :: yield(:)
 
       call get_mname(dpt, mname)
@@ -62,12 +57,12 @@ contains
 
    ! calculates promotion pathway using Boardbot buildings
    subroutine bb_bldg(needed, boost, dpt)
-      real, intent(in) :: boost
       character(1), intent(in) :: dpt
-      integer, intent(in) :: needed
       character(50), dimension(6), parameter :: options = &
          ["1-story", "2-story", "3-story", "4-story", "5-story", "6-story"]
+      integer, intent(in) :: needed
       integer, dimension(6), parameter :: yield = [5, 26, 100, 220, 440, 1400]
+      real, intent(in) :: boost
 
       print "(A)", "Boardbot Buildings"
       print "(A)", "------------------"
@@ -76,14 +71,14 @@ contains
    end subroutine bb_bldg
 
    subroutine dpt_bldg(needed, boost, dpt)
-      real, intent(in) :: boost
       character(1), intent(in) :: dpt
-      integer, intent(in) :: needed
       character(50), dimension(6), parameter :: options = &
          ["1-story", "2-story", "3-story", "4-story", "5-story", "6-story"]
+      integer, intent(in) :: needed
       integer, dimension(6), parameter :: yield = &
          [15, 65, 250, 550, 1100, 3100]
-
+      real, intent(in) :: boost
+      
       print "(A)", "Departmental Buildings"
       print "(A)", "----------------------"
 
@@ -91,11 +86,11 @@ contains
    end subroutine dpt_bldg
 
    subroutine facil(needed, boost, dpt)
-      real, intent(in) :: boost
       character(1), intent(in) :: dpt
-      integer, intent(in) :: needed
       character(50), allocatable :: options(:)
       integer, allocatable :: yield(:)
+      integer, intent(in) :: needed
+      real, intent(in) :: boost
 
       if (dpt == "b" .or. dpt == "B") then
          allocate(options(9))
